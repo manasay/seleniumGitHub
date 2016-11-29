@@ -9,7 +9,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -22,12 +24,19 @@ import in.jsoft.newtours.allpagesfunctionality.NewToursSignOn;
 import in.jsoft.newtours.constants.AllConstants;
 import in.jsoft.newtours.utility.Browser;
 import in.jsoft.newtours.utility.Library;
+import in.jsoft.newtours.utility.ListenersClass;
 import in.jsoft.newtours.utility.TestDataProvider;
+
+
+@Listeners(ListenersClass.class)
+
 
 public class AllTestCases {
 
 	private WebDriver driver = null;
 	private NewToursHomePage hp = null;
+	
+
 
 	@Parameters({ "bname" })
 	@BeforeMethod
@@ -42,6 +51,7 @@ public class AllTestCases {
 			hp = PageFactory.initElements(driver, NewToursHomePage.class);
 		} catch (Exception e) {
 			String errormsg = e.getMessage();
+			
 		}
 
 	}
@@ -63,13 +73,13 @@ public class AllTestCases {
 			Assert.assertEquals(actualResult, expectedResult);
 			testResult = "pass";
 		} catch (Exception e) {
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			// e.printStackTrace();
 			errMsg = e.getMessage();
 		} catch (Error e) {
 			// String errmsg = er.getMessage();
 			errMsg = e.getMessage();
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			throw e;
 		} finally {
 			try {
@@ -157,13 +167,13 @@ public class AllTestCases {
 			System.out.println("------------------------------------");
 			Assert.assertEquals(actualResult, expectedResult);
 		} catch (Exception e) {
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			// e.printStackTrace();
 			errMsg = e.getMessage();
 		} catch (Error e) {
 			// String errmsg = er.getMessage();
 			errMsg = e.getMessage();
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			throw e;
 		} finally {
 			try {
@@ -204,13 +214,13 @@ public class AllTestCases {
 			String expectedResult = Library.getLocators("expectedTitle", AllConstants.FLIGHTFILE);
 			Assert.assertEquals(actualResult, expectedResult);
 		} catch (Exception e) {
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			// e.printStackTrace();
 			errMsg = e.getMessage();
 		} catch (Error e) {
 			// String errmsg = er.getMessage();
 			errMsg = e.getMessage();
-
+			Library.takeScreenShot(driver, driver.getTitle());
 			throw e;
 		} finally {
 			try {
@@ -226,5 +236,12 @@ public class AllTestCases {
 	@AfterMethod()
 	public void afterMethod() {
 		hp.closeBrowser();
+	}
+	
+	@AfterSuite
+	public void testCount()
+	{
+		System.out.println("Total TestCases executed:");
+		System.out.println(ListenersClass.passCount);
 	}
 }
